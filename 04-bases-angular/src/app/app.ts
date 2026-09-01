@@ -1,5 +1,6 @@
 import { Component, Signal, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Navbar } from './components/shared/navbar/navbar';
 
 /**
  * COMPONENTE: App (Root Component)
@@ -18,7 +19,7 @@ import { RouterOutlet } from '@angular/router';
     Al ser un componente Standalone (por defecto en Angular moderno), debemos declarar
     explícitamente sus dependencias. Aquí importamos directivas, pipes u otros componentes.
   */
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, Navbar],
 
   // Ruta al archivo externo que contiene la estructura HTML (View) de este componente.
   templateUrl: './app.html',

@@ -16,4 +16,12 @@ export const routes: Routes = [
   // { path: '**', redirectTo: '/404' } // Wildcard para rutas no encontradas
   { path: '', component: CounterPage },
   { path: 'hero', component: HeroPage },
+ /*
+    WILDCARD ROUTE (Comodín)
+    Atrapa cualquier URL que no haya hecho match con las rutas anteriores.
+    Actúa como un "Fallback" para redirigir a una ruta segura (ej. Inicio o 404).
+    ⚠️ IMPORTANTE: Siempre debe ser el ÚLTIMO elemento en el arreglo de rutas,
+    ya que el Router evalúa en cascada (de arriba hacia abajo).
+  */
+  { path: '**', redirectTo: '' }
 ];

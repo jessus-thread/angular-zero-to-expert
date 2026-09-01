@@ -1,0 +1,19 @@
+<style>
+  nav {
+    display: flex;
+    justify-content: space-around;
+    background-color: #212121;
+    color: #FFFFFF;
+    padding: 10px;
+  }
+
+  nav a {
+    color: #FFFFFF;
+    text-decoration: none;
+  }
+</style>
+
+<nav>
+  <a routerLink="/">Contador</a>
+  <a [routerLink]="['/hero']">Hero</a>
+</nav>
