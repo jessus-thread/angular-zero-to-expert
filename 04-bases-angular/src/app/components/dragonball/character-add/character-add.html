@@ -1,0 +1,45 @@
+<!-- El Signal 'name()' se actualiza en tiempo real gracias a los eventos (input) del cajón de texto -->
+<h3 class="text-2xl font-medium my-5">Agregar: {{ name() }}</h3>
+
+<!--
+      TWO-WAY DATA BINDING (MANUAL)
+      Para que un input refleje un estado en tiempo real (y viceversa) necesitamos dos cosas:
+      1. PROPERTY BINDING [value]: Forzamos a que el input siempre muestre el valor actual del Signal.
+      2. EVENT BINDING (input)/(change): Escuchamos cuando el usuario teclea para actualizar el Signal.
+    -->
+
+<!--
+        USO DE REFERENCIAS LOCALES (#txtName)
+        En lugar de usar (input)="name.set($event.target.value)", lo cual requiere
+        tipar el evento en TS o lidiar con advertencias del compilador, usamos '#txtName'.
+        Esta almohadilla crea una variable que apunta directamente al elemento HTML <input>.
+        Al hacer 'txtName.value', leemos su valor directamente de forma limpia.
+      -->
+<input
+  type="text"
+  class="border border-gray-300 rounded-sm placeholder:text-gray-500 p-3 my-3"
+  placeholder="Nombre"
+  [value]="name()"
+  (change)="name.set(txtName.value)"
+  (input)="name.set(txtName.value)"
+  #txtName
+/>
+
+<!--
+        El símbolo + antes de txtPower.value (+txtPower.value) es una conversión rápida
+        (Casting) de JavaScript para transformar el texto del input a un número real,
+        asegurando que el Signal de power no reciba un string.
+      -->
+<input
+  type="number"
+  class="border border-gray-300 rounded-sm placeholder:text-gray-500 p-3 my-3"
+  placeholder="Poder"
+  [value]="power()"
+  (change)="power.set(+txtPower.value)"
+  (input)="power.set(+txtPower.value)"
+  #txtPower
+/>
+
+<button (click)="addCharacter()" class="border border-sky-900 bg-sky-700 text-white p-3 rounded-sm">
+  Agregar
+</button>

@@ -1,0 +1,21 @@
+<h1 class="text-3xl font-medium my-5">Dragonball Page</h1>
+<hr />
+
+<section class="mt-5 flex">
+  <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+  <div class="h-auto w-1/2">
+    <dragonball-character-add
+      class="h-auto w-full flex flex-col"
+      (newCharacter)="dragonBallService.addCharacters($event)"
+    />
+  </div>
+
+  <!-- COLUMNA DERECHA: LISTADO -->
+  <div class="h-auto w-1/2 flex flex-col px-5">
+    <!-- Las llaves se usan para pasar datos a componentes hijos -->
+    <dragonball-character-list
+      listName="Listado de personajes"
+      [characters]="dragonBallService.characters()"
+    />
+  </div>
+</section>

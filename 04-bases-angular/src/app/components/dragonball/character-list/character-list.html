@@ -1,0 +1,33 @@
+<h3 class="text-2xl font-medium my-5">{{ listName() }}</h3>
+
+<ul class="list-disc mt-2">
+  <!--
+        ITERACIÓN DE ARREGLOS
+        - track character.id: Como indicaste, nunca usar $index como track. Si borramos el primer
+          elemento de un array, todos los índices cambian (el que era 1 ahora es 0), lo que
+          destruye el caché del DOM y obliga a Angular a repintar toda la lista.
+        - let idx = $index: Creamos una variable local para imprimir el número de fila.
+      -->
+  @for (character of characters(); track character.id; let idx = $index) {
+    @if (character.power > 500) {
+      <li class="mx-5">
+        <span>{{ idx + 1 }} - {{ character.name }}</span>
+
+        <!--
+              CLASS BINDING (Enlace de Clases Dinámico)
+              Sintaxis: [class.nombre-clase]="condición"
+              Esto es súper poderoso para estilos condicionales sin necesidad de
+              ensuciar el TS con lógica visual.
+            -->
+        <strong
+          [class.text-sky-600]="character.power < 9000"
+          [class.text-red-800]="character.power > 9000"
+        >
+          ({{ character.power }})
+        </strong>
+      </li>
+    } @else {
+      <li class="mx-5"><strong>Aquí no hay nadie</strong></li>
+    }
+  }
+</ul>

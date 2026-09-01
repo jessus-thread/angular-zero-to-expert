@@ -41,5 +41,6 @@ export class Navbar {
     { path: '/', name: 'Contador', isPathInitial: true },
     { path: '/hero', name: 'Hero', isPathInitial: false },
     { path: '/dragonball', name: 'Dragon Ball', isPathInitial: false },
+    { path: '/dragonball-super', name: 'Dragon Ball Super', isPathInitial: false },
   ]);
 }
