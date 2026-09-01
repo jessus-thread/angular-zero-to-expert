@@ -1,0 +1,60 @@
+<h1 class="text-3xl font-medium my-5">Dragonball Page</h1>
+
+<hr />
+
+<section class="mt-5 flex">
+  <div class="h-auto w-1/2 flex flex-col">
+    <h3 class="text-2xl font-medium my-5">Agregar: {{ name() }}</h3>
+
+    <input
+      type="text"
+      class="border border-gray-300 rounded-sm placeholder:text-gray-500 p-3 my-3"
+      placeholder="Nombre"
+      [value]="name()"
+      (change)="name.set(txtName.value)"
+      (input)="name.set(txtName.value)"
+      /* Hace Referencia a este input */
+      #txtName
+    />
+
+    <input
+      type="number"
+      class="border border-gray-300 rounded-sm placeholder:text-gray-500 p-3 my-3"
+      placeholder="Poder"
+      [value]="power()"
+      (change)="power.set(+txtPower.value)"
+      (input)="power.set(+txtPower.value)"
+      #txtPower
+    />
+
+    <button
+      (click)="addCharacter()"
+      class="border border-sky-900 bg-sky-700 text-white p-3 rounded-sm"
+    >
+      Agregar
+    </button>
+  </div>
+
+  <div class="h-auto w-1/2 flex flex-col px-5">
+    <h3 class="text-2xl font-medium my-5">Listado fuertes</h3>
+
+    <ul class="list-disc mt-2">
+      <!-- Se recomienda no usar el $index como track ya que puede dar efectos indeseados -->
+      @for (character of characters(); track character.id; let idx = $index) {
+        @if (character.power > 500) {
+          <li class="mx-5">
+            <span>{{ idx + 1 }} - {{ character.name }}</span>
+            <strong
+              [class.text-sky-600]="character.power < 9000"
+              [class.text-red-800]="character.power > 9000"
+            >
+              ({{ character.power }})</strong
+            >
+          </li>
+        } @else {
+          <li class="mx-5"><strong>Aquí no hay nadie</strong></li>
+        }
+      }
+    </ul>
+  </div>
+</section>

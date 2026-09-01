@@ -1,19 +1,71 @@
 <style>
+  /*
+    ENCAPSULACIÓN DE ESTILOS (View Encapsulation)
+    Aunque estos estilos estén escritos directamente en el HTML, Angular aplica
+    ViewEncapsulation.Emulated por defecto. Esto significa que inyectará atributos
+    únicos a estas etiquetas en tiempo de compilación (ej. <nav _ngcontent-xyz>).
+    Estos estilos son seguros: NO afectarán a ninguna otra etiqueta <nav> o <a>
+    fuera de este componente.
+  */
   nav {
     display: flex;
     justify-content: space-around;
     background-color: #212121;
-    color: #FFFFFF;
+    color: #ffffff;
     padding: 10px;
   }
 
   nav a {
-    color: #FFFFFF;
+    color: #ffffff;
     text-decoration: none;
+  }
+
+  nav a.active {
+    color: red;
+    text-decoration: underline;
   }
 </style>
 
 <nav>
-  <a routerLink="/">Contador</a>
-  <a [routerLink]="['/hero']">Hero</a>
+  <!--
+    NUEVO CONTROL DE FLUJO (Angular 17+)
+    @for itera sobre el Signal.
+    ⚠️ MEJORA DE RENDIMIENTO: Al usar 'track route.path', le damos a Angular
+    un identificador ÚNICO. Si el arreglo de rutas llega a mutar en el futuro,
+    Angular sabrá exactamente qué nodo del DOM actualizar sin repintar toda la barra de navegación.
+  -->
+  @for (route of routes(); track route.path) {
+    <!--
+      DOCUMENTACIÓN DE DIRECTIVAS DEL ROUTER (SPA Navigation):
+
+      1. [routerLink]="[route.path]" (Property Binding)
+         Reemplaza al atributo nativo 'href'. Si usáramos 'href', el navegador web
+         recargaría la página entera, borrando la memoria y perdiendo el estado de los Signals.
+         [routerLink] intercepta el clic, bloquea la recarga nativa y cambia el componente
+         en pantalla de forma instantánea. (Es lo que hace que sea una SPA).
+         Nota: Usamos corchetes [ ] porque 'route.path' es una variable dinámica de TS.
+
+      2. routerLinkActive="active"
+         Es un "escuchador" constante. Angular revisa la URL actual del navegador;
+         si la URL coincide con lo que definimos en el routerLink, automáticamente
+         le inyecta la clase CSS especificada (en este caso, "active").
+         Si el usuario navega a otra vista, Angular remueve la clase por sí solo.
+
+      3. [routerLinkActiveOptions]="{ exact: route.isPathInitial }"
+         Define la estrategia de coincidencia (Matching Strategy).
+         - El problema: Por defecto, Angular evalúa por inclusión. Esto significa que la
+           URL '/hero' INCLUYE el path '/'. Por lo tanto, sin esta directiva,
+           el botón de Inicio ('/') siempre estaría marcado en rojo, sin importar dónde estés.
+         - La solución: Le pasamos un objeto donde 'exact' es true (solo para nuestra ruta raíz)
+           y false para las demás. Esto obliga a Angular a requerir una coincidencia 100% exacta
+           solo cuando sea necesario.
+    -->
+    <a
+      [routerLink]="[route.path]"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: route.isPathInitial }"
+    >
+      {{ route.name }}
+    </a>
+  }
 </nav>
