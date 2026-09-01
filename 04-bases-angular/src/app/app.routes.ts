@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { CounterPage } from './pages/counter/counter-page';
+import { HeroPage } from './pages/hero/hero-page';
 
 /**
  * ARCHIVO: app.routes.ts
@@ -12,4 +14,6 @@ export const routes: Routes = [
   // Ejemplo de estructura base (vacía por ahora)
   // { path: '', redirectTo: '/home', pathMatch: 'full' },
   // { path: '**', redirectTo: '/404' } // Wildcard para rutas no encontradas
+  { path: '', component: CounterPage },
+  { path: 'hero', component: HeroPage },
 ];

@@ -1,0 +1,25 @@
+<h1 class="p-5 text-2xl font-bold">Contador: {{ counter }}</h1>
+<h1 class="p-5 text-2xl font-bold">Contador Signal: {{ counterSignal() }}</h1>
+
+<hr />
+
+<button
+  (click)="increaseBy(1)"
+  class="p-3 m-5 border border-gray-800 bg-gray-600 text-white rounded-xs"
+>
+  Aumentar contador
+</button>
+
+<button
+  (click)="subractBy(1)"
+  class="p-3 m-5 border border-gray-800 bg-gray-600 text-white rounded-xs"
+>
+  Restar contador
+</button>
+
+<button
+  (click)="resetCounter()"
+  class="p-3 m-5 border border-gray-800 bg-gray-600 text-white rounded-xs"
+>
+  Resetear contador
+</button>

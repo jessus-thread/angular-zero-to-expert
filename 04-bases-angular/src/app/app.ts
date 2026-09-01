@@ -27,7 +27,7 @@ import { RouterOutlet } from '@angular/router';
     Ruta al archivo externo de estilos. Estos estilos están encapsulados por defecto
     (ViewEncapsulation.Emulated), lo que significa que no afectarán a otros componentes.
   */
-  styleUrl: './app.css',
+  // styleUrl: './app.css',
 })
 export class App {
   /**

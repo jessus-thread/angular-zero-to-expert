@@ -1,0 +1,62 @@
+<!--
+  La ejecución de un Signal en el template: {{ name() }}
+  Aunque parece que estamos llamando a una función (lo cual era un antipatrón
+  en Angular con variables normales), con Signals es la forma correcta.
+  Angular sabe exactamente cuándo ejecutar esto sin afectar el rendimiento.
+-->
+<h1 class="p-5 text-2xl font-bold text-cyan-800">{{ name() }}</h1>
+
+<!--
+  Nota Semántica HTML:
+  Dentro de un <dl> (Description List), los términos deben ir en <dt> (Description Term)
+  y las descripciones en <dd> (Description Details). No se usa <td> (Table Data).
+-->
+<dl class="p-5">
+  <dt>Nombre:</dt>
+  <dd class="font-semibold mb-2">{{ name() }}</dd>
+
+  <dt>Edad:</dt>
+  <dd class="font-semibold mb-2">{{ age() }}</dd>
+
+  <dt>Método (Señal Computada):</dt>
+  <dd class="font-semibold mb-2">{{ heroDescription() }}</dd>
+
+  <dt>Capitalizado:</dt>
+  <!--
+    Opción A: Usar un Signal Computado (capitalizedName).
+    Ideal si esta lógica de transformación también se necesita usar en el .ts
+  -->
+  <dd class="font-semibold mb-2">{{ capitalizedName() }}</dd>
+
+  <!--
+    Opción B: Usar un Pipe Nativo (uppercase).
+    Ideal si la transformación es PURAMENTE visual y el .ts no necesita saberlo.
+    Los Pipes en Angular están altamente optimizados.
+  -->
+  <dd class="font-semibold mb-2">Con pipes: {{ name() | uppercase }}</dd>
+</dl>
+
+<!--
+  Event Binding (Enlace de eventos)
+  Escucha el evento nativo del DOM 'click' y ejecuta el método correspondiente.
+-->
+<button
+  (click)="changeHero()"
+  class="mx-2 p-2 border border-gray-800 bg-gray-700 text-white rounded-sm"
+>
+  Cambiar nombre
+</button>
+
+<button
+  (click)="chageAge()"
+  class="mx-2 p-2 border border-gray-800 bg-gray-700 text-white rounded-sm"
+>
+  Cambiar edad
+</button>
+
+<button
+  (click)="resetForm()"
+  class="mx-2 p-2 border border-gray-800 bg-gray-700 text-white rounded-sm"
+>
+  Reset
+</button>
