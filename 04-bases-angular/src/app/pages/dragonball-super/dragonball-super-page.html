@@ -2,17 +2,32 @@
 <hr />
 
 <section class="mt-5 flex">
-  <!-- COLUMNA IZQUIERDA: FORMULARIO -->
+  <!-- COLUMNA IZQUIERDA: FORMULARIO (Componente Hijo) -->
   <div class="h-auto w-1/2">
+    <!--
+      EVENT BINDING (Comunicación Hijo -> Padre)
+      El evento (newCharacter) fue creado en el componente hijo usando @Output().
+      Cuando el hijo emite el evento, este componente padre lo escucha y recibe el
+      payload a través de la variable especial '$event'.
+      Luego, el padre toma ese dato y se lo envía al servicio central.
+    -->
     <dragonball-character-add
       class="h-auto w-full flex flex-col"
       (newCharacter)="dragonBallService.addCharacters($event)"
     />
   </div>
 
-  <!-- COLUMNA DERECHA: LISTADO -->
+  <!-- COLUMNA DERECHA: LISTADO (Componente Hijo) -->
   <div class="h-auto w-1/2 flex flex-col px-5">
-    <!-- Las llaves se usan para pasar datos a componentes hijos -->
+    <!--
+      PROPERTY BINDING (Comunicación Padre -> Hijo)
+      Usamos las directivas @Input() en el componente hijo para que pueda recibir datos.
+
+      - Sin corchetes (listName="Listado de personajes"): Pasamos un string estático o duro.
+      - Con corchetes ([characters]="..."): Le indicamos a Angular que evalúe
+        lo que está entre comillas como código TypeScript. Aquí le estamos pasando
+        el valor actualizado del Signal que vive en nuestro servicio.
+    -->
     <dragonball-character-list
       listName="Listado de personajes"
       [characters]="dragonBallService.characters()"

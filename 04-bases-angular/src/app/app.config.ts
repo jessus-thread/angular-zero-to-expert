@@ -2,6 +2,7 @@ import { ApplicationConfig, provideBrowserGlobalErrorListeners } from '@angular/
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 /**
  * ARCHIVO: app.config.ts
@@ -18,5 +19,10 @@ export const appConfig: ApplicationConfig = {
 
     // Inicializa el sistema de enrutamiento y lo vincula con la API History del navegador
     provideRouter(routes),
+    // HashStrategy
+    {
+      provide: LocationStrategy,
+      useClass: HashLocationStrategy,
+    },
   ],
 };
