@@ -1,0 +1,43 @@
+<div id="nav" class="w-full px-6">
+  <!--
+    El 'track item.route' está perfecto aquí. Al usar un valor único y estático,
+    garantizamos el máximo rendimiento del @for.
+  -->
+  @for (item of menuOptions; track item.route) {
+    <!--
+        ROUTER LINK ACTIVE + TAILWIND CSS
+        Normalmente se inyecta una clase semántica como "active".
+        Aquí estamos inyectando clases utilitarias de Tailwind ("bg-blue-800").
+        Angular es agnóstico al CSS, así que si la ruta coincide, aplicará ese
+        fondo azul automáticamente, eliminando la necesidad de escribir CSS extra.
+      -->
+    <a
+      [routerLink]="item.route"
+      routerLinkActive="bg-blue-800"
+      class="w-full px-2 inline-flex space-x-2 items-center border-b border-slate-700 py-3 hover:bg-white/5 transition ease-linear duration-150"
+    >
+      <div>
+        <!--
+          PROPERTY BINDING vs STRING INTERPOLATION
+
+          ❌ Antipatrón: class="{{ item.icon }}"
+          La interpolación convierte todo a un string gigante. Si tuviéramos clases estáticas
+          mezcladas (ej. class="fa-solid {{ item.icon }}"), Angular tendría que hacer un
+          procesamiento extra (concatenación) que afecta ligeramente el rendimiento y
+          puede causar bugs visuales.
+
+          ✅ Estándar de la industria: [class]="item.icon"
+          El Property Binding (usar corchetes) le dice al motor de Angular que inyecte
+          el valor directamente en la propiedad del DOM nativo. Es más limpio, previene
+          errores de concatenación y es la forma óptima de manejar atributos dinámicos.
+        -->
+        <i [class]="item.icon"></i>
+      </div>
+
+      <div class="flex flex-col">
+        <span class="text-lg font-bold leading-5 text-white">{{ item.label }}</span>
+        <span class="text-sm text-white/50 hidden md:block">{{ item.subLabel }}</span>
+      </div>
+    </a>
+  }
+</div>

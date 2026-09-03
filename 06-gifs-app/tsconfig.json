@@ -1,0 +1,54 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    /*
+      BASE URL (Punto de partida)
+      Le indica al compilador de TypeScript dónde está la raíz del proyecto.
+      El punto "." significa "la misma carpeta donde se encuentra este archivo tsconfig.json".
+      Todas las rutas absolutas y alias se calcularán a partir de aquí.
+    */
+    "baseUrl": ".",
+    /*
+      PATHS (Alias de Rutas)
+      Es un mapa de atajos. Le decimos a TypeScript:
+      "Cada vez que yo escriba un import que empiece con '@environments/',
+      no busques en node_modules. Ve a la carpeta 'src/environments/' y busca ahí".
+
+      El asterisco (*) es un comodín. Significa "cualquier archivo dentro de esa carpeta".
+
+      💡 Truco Senior: En proyectos grandes, verás esto lleno de alias como:
+      "@components/*": ["src/app/components/*"],
+      "@interfaces/*": ["src/app/interfaces/*"],
+      "@services/*": ["src/app/services/*"]
+    */
+    "paths": {
+      "@environments/*": ["src/environments/*"]
+    },
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve"
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ]
+}
