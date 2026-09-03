@@ -8,8 +8,10 @@
       Le indica al compilador de TypeScript dónde está la raíz del proyecto.
       El punto "." significa "la misma carpeta donde se encuentra este archivo tsconfig.json".
       Todas las rutas absolutas y alias se calcularán a partir de aquí.
+
+      Em versiones modernas de ts no es necesario esto
+      "baseUrl": ".",
     */
-    "baseUrl": ".",
     /*
       PATHS (Alias de Rutas)
       Es un mapa de atajos. Le decimos a TypeScript:
@@ -24,7 +26,7 @@
       "@services/*": ["src/app/services/*"]
     */
     "paths": {
-      "@environments/*": ["src/environments/*"]
+      "@environments/*": ["./src/environments/*"]
     },
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
