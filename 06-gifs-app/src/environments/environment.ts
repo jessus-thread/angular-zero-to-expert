@@ -4,4 +4,5 @@ export const environment = {
   companyName2: 'App',
   companySlogan: 'Maneja tus gifs',
   // Apikeys
+  apiUrl: 'https://rickandmortyapi.com/api',
 };
