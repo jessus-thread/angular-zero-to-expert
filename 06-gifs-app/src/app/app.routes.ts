@@ -37,6 +37,17 @@ export const routes: Routes = [
         path: 'search',
         loadComponent: () => import('./gifs/pages/search-pages/search-pages'),
       },
+      {
+        /*
+          ENRUTAMIENTO DINÁMICO (Dynamic Route Parameters)
+          El prefijo ':' en ':query' define un segmento variable en la ruta.
+          Al hacer esto, utilizamos la URL como nuestra "Fuente de Verdad" para el estado
+          de la búsqueda. Esto permite que el usuario recargue la página o comparta el
+          enlace exacto con otra persona, y la aplicación sepa exactamente qué datos cargar.
+        */
+        path: 'history/:query',
+        loadComponent: () => import('./gifs/pages/gif-history-page/gif-history-page'),
+      },
       /*
         FALLBACK DE RUTAS HIJAS
         Si el usuario entra a '/dashboard/cualquier-cosa-rara', lo enviamos

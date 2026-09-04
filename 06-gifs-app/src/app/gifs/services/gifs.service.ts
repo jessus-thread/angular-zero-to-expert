@@ -1,13 +1,29 @@
+/*
+  Orden de importaciones
+
+  1. Importaciones de angular
+  2. Importaciones de tercero
+  3. Nuestras propias importaciones
+*/
+
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environments/environment';
 
 // Usar 'import type' es una excelente práctica para que el compilador
 // elimine estas referencias en tiempo de ejecución (Cero impacto en el Bundle).
 import type { CharacterResponse } from '../interfaces/res-characters.interface';
-import type { Observable } from 'rxjs';
+import { map, tap, type Observable } from 'rxjs';
 import type { Gif } from '../interfaces/character.interface';
 import { GifMapper } from '../mapper/gif.mapper';
+
+const GIF_KEY = 'gifs';
+
+const loadFromLocalStorage = () => {
+  const gifsFromLocalStorage = localStorage.getItem(GIF_KEY) ?? '{}';
+
+  return JSON.parse(gifsFromLocalStorage);
+};
 
 /*
   SINGLETON PATTERN & TREE SHAKING
@@ -37,6 +53,13 @@ export class GifService {
   public trendingGifsLoading = signal<boolean>(true);
 
   /*
+    Usamos Record cuando son objetos con keys dinamicas
+  */
+  public searchHistory = signal<Record<string, Gif[]>>(loadFromLocalStorage());
+  // Cada que searchHistory cambie se computara searchHistorykeys
+  public searchHistoryKeys = computed(() => Object.keys(this.searchHistory()));
+
+  /*
     INICIALIZACIÓN TEMPRANA (Eager Loading)
     Al invocar la carga de datos directamente en el constructor del servicio,
     garantizamos que la petición de red se dispare en el instante en que el
@@ -45,6 +68,12 @@ export class GifService {
   constructor() {
     this.loadTrendingGifs();
   }
+
+  public saveGifsToLocalStorage = effect(() => {
+    const historyString = JSON.stringify(this.searchHistory());
+
+    localStorage.setItem(GIF_KEY, historyString);
+  });
 
   public loadTrendingGifs(): void {
     /*
@@ -82,5 +111,49 @@ export class GifService {
           console.log(gifs);
         },
       });
+  }
+
+  public searchGifs(query: string): Observable<Gif[]> {
+    /*
+      BÚSQUEDA DINÁMICA Y RETORNO DE STREAMS (Flujos de Datos)
+      A diferencia de 'loadTrendingGifs', este método retorna el Observable
+      en lugar de suscribirse internamente. Esto delega el control al componente
+      que lo llama, permitiéndole gestionar el ciclo de vida (ej. usar toSignal
+      o el pipe async en el HTML).
+    */
+    return (
+      this.http
+        .get<CharacterResponse>(`${environment.apiUrl}/character`, {
+          params: {
+            name: query, // Inyectamos el parámetro dinámico a la URL de forma segura
+          },
+        })
+        /*
+          RXJS PIPELINE & DATA TRANSFORMATION
+          El método .pipe() nos permite interceptar el flujo de datos de la petición HTTP
+          antes de que llegue al componente final.
+
+          A través del operador 'map', aplicamos nuestra Capa Anticorrupción (Mapper)
+          "en pleno vuelo". Transformamos el DTO crudo del servidor (CharacterResponse)
+          en nuestro arreglo de entidades limpias (Gif[]). El componente que reciba esto
+          nunca sabrá cómo era la respuesta original de la API.
+        */
+        .pipe(
+          map((response: CharacterResponse) =>
+            GifMapper.mapCharacterItemsToGifArray(response.results),
+          ),
+          // Sirve para manejar efectos secundarios
+          tap((items) => {
+            this.searchHistory.update((history) => ({
+              ...history,
+              [query.toLocaleLowerCase()]: items,
+            }));
+          }),
+        )
+    );
+  }
+
+  public getHistoryGifs(query: string): Gif[] {
+    return this.searchHistory()[query] ?? [];
   }
 }
