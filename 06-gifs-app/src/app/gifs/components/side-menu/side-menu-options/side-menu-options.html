@@ -43,7 +43,13 @@
 
   @for (key of gifService.searchHistoryKeys(); track key) {
     <!--
-      [routerLink]="['/dashboard/history', key]" de esta manera mandamos parametros en la url
+      NAVEGACIÓN DECLARATIVA Y RUTAS DINÁMICAS (Dynamic Route Binding)
+      Utilizamos 'Property Binding' ([routerLink]) para construir la URL pasando un arreglo de segmentos.
+      El Router de Angular concatenará la ruta estática '/dashboard/history' con el valor dinámico de 'key'.
+
+      Beneficio Arquitectónico: Al hacer esto directamente en el HTML de forma declarativa,
+      evitamos ensuciar el TypeScript con eventos (click) e inyecciones del Router (router.navigate),
+      manteniendo los componentes de UI enfocados solo en la presentación.
     -->
     <a
       [routerLink]="['/dashboard/history', key]"

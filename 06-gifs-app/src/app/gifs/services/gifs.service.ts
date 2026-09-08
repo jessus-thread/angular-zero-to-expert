@@ -6,14 +6,15 @@
   3. Nuestras propias importaciones
 */
 
-import { HttpClient } from '@angular/common/http';
 import { computed, effect, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environments/environment';
+import { HttpClient } from '@angular/common/http';
+
+import { map, tap, type Observable } from 'rxjs';
 
 // Usar 'import type' es una excelente práctica para que el compilador
 // elimine estas referencias en tiempo de ejecución (Cero impacto en el Bundle).
 import type { CharacterResponse } from '../interfaces/res-characters.interface';
-import { map, tap, type Observable } from 'rxjs';
 import type { Gif } from '../interfaces/character.interface';
 import { GifMapper } from '../mapper/gif.mapper';
 
@@ -50,7 +51,18 @@ export class GifService {
   */
   public trendingGifs = signal<Gif[]>([]);
 
-  public trendingGifsLoading = signal<boolean>(true);
+  public trendingGifsLoading = signal<boolean>(false);
+  private trendingPage = signal(0);
+
+  public trendingGifGroup = computed<Gif[][]>(() => {
+    const groups = [];
+
+    for (let i = 0; i < this.trendingGifs().length; i += 3) {
+      groups.push(this.trendingGifs().slice(i, i + 3));
+    }
+
+    return groups;
+  });
 
   /*
     Usamos Record cuando son objetos con keys dinamicas
@@ -76,6 +88,10 @@ export class GifService {
   });
 
   public loadTrendingGifs(): void {
+    if (this.trendingGifsLoading()) return;
+
+    this.trendingGifsLoading.set(true);
+
     /*
       PETICIÓN HTTP TIPADA
       1. Tipado Estricto: Al pasar <CharacterResponse> al método GET, establecemos
@@ -86,7 +102,7 @@ export class GifService {
     this.http
       .get<CharacterResponse>(`${environment.apiUrl}/character`, {
         params: {
-          page: 1,
+          page: this.trendingPage(),
         },
       })
       .subscribe({
@@ -105,7 +121,9 @@ export class GifService {
           const gifs = GifMapper.mapCharacterItemsToGifArray(response.results);
 
           // Mutamos el estado global, notificando a toda la UI instantáneamente.
-          this.trendingGifs.set(gifs);
+          this.trendingGifs.update((currentGifs) => [...currentGifs, ...gifs]);
+
+          this.trendingPage.update((currentPage) => currentPage + 1);
 
           this.trendingGifsLoading.set(false);
           console.log(gifs);

@@ -1,3 +1,15 @@
-<section class="py-5">
-  <gif-list [gifs]="gifService.trendingGifs()"></gif-list>
-</section>
+<div
+  #groupDiv
+  (scroll)="onScroll($event)"
+  class="h-screen grid overflow-y-scroll grid-cols-2 md:grid-cols-4 gap-4 pt-5"
+>
+  @for (group of gifService.trendingGifGroup(); track $index) {
+    <div class="grid gap-4">
+      @for (gif of group; track gif.id) {
+        <div>
+          <img class="h-full w-full rounded-lg object-cover" [src]="gif.image" [alt]="gif.name" />
+        </div>
+      }
+    </div>
+  }
+</div>

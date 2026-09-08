@@ -1,4 +1,5 @@
 import { Component, inject, signal } from '@angular/core';
+
 import { GifList } from '../../components/gif-list/gif-list';
 import { GifService } from '../../services/gifs.service';
 import { Gif } from '../../interfaces/character.interface';
